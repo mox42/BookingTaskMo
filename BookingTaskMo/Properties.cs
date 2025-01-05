@@ -16,7 +16,6 @@ namespace BookingTaskMo
         // PROPERTIES : Verify number of properties and adding to wishlist
         // ===========================================================================================
 
-
         // Retrieves the number of properties, scrolls to a specific card, and adds it to the wishlist
         public static void NumerOfPropertiesAndScrolling()
         {
@@ -41,8 +40,7 @@ namespace BookingTaskMo
         public static string GetNumberOfProperties()
         {
             // Wait for the results text element to be visible on the page
-            var wait = new WebDriverWait(TestSetup.driver, TimeSpan.FromSeconds(10));
-            IWebElement resultsTextElement = wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementIsVisible(By.XPath("//h1[@aria-live='assertive']")));
+            IWebElement resultsTextElement = TestSetup.WaitUntilElementIsVisible(By.XPath("//h1[@aria-live='assertive']"), 10);
 
             // Re-locate the results element
             resultsTextElement = TestSetup.driver.FindElement(By.XPath("//h1[@aria-live='assertive']"));
@@ -86,14 +84,11 @@ namespace BookingTaskMo
             heartIcon.Click();
 
             // Wait for the wishlist popover to be visible within 10 seconds
-            var wait = new WebDriverWait(TestSetup.driver, TimeSpan.FromSeconds(10));
-
-            // Find the wishlist popover element once it becomes visible
-            IWebElement wishlistPopover = wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementIsVisible(By.CssSelector("[data-testid='wishlist-popover-content']")));
+            By wishlistPopoverLocator = By.CssSelector("[data-testid='wishlist-popover-content']");
+            IWebElement wishlistPopover = TestSetup.WaitUntilElementIsClickable(wishlistPopoverLocator, 10);
 
             // Find the link inside the popover to view the wishlist
             IWebElement link = wishlistPopover.FindElement(By.CssSelector("a"));
-            Thread.Sleep(1000);
             TestSetup.HighlightElement(link);
             link.Click();
 

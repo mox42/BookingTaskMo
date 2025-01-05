@@ -16,6 +16,10 @@ namespace BookingTaskMo
         // It assist with common actions like browser setup, navigation, and element interaction
         // ===========================================================================================
 
+        //****Update note*****
+        //I find out that the test wil run ok without all thread.sleep, so i removed some and changed others to Dynamic wait
+        //****Update note*****
+
         // WebDriver instance for managing browser interaction.
         public static IWebDriver driver = new ChromeDriver();
 
@@ -53,7 +57,7 @@ namespace BookingTaskMo
             {
                 // Wait for the pop-up close button to become visible.
                 IWebElement closeButton = wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementExists(By.XPath("//button[@aria-label='Dismiss sign-in info.']")));
-                Thread.Sleep(500);
+                
 
                 // Highlight the close button for visual confirmation (The method can be found below)
                 HighlightElement(closeButton);
@@ -106,7 +110,8 @@ namespace BookingTaskMo
             executor.ExecuteScript("arguments[0].setAttribute('style', 'border: 2px solid lightskyblue; border-radius: 10px; background-color: lightskyblue;!important')", element);
 
             // Sleep for 1 second to make the highlight visible
-            Thread.Sleep(1000);
+            //Thread.Sleep(1000);
+
 
             // Remove the highlight after 1 second
             executor.ExecuteScript("arguments[0].setAttribute('style' , 'background: none !important')", element);
@@ -118,9 +123,29 @@ namespace BookingTaskMo
             // Create an instance of JavaScriptExecutor to execute JavaScript in the browser
             IJavaScriptExecutor executor = (IJavaScriptExecutor)driver;
 
-            // Scroll the specified element into view with smooth scrolling and centered alignment
-            executor.ExecuteScript("arguments[0].scrollIntoView({behavior: 'smooth', block: 'center'});", element);
+            // Scroll the specified element into view with centered alignment
+            executor.ExecuteScript("arguments[0].scrollIntoView({block: 'center'});", element);
+
         }
+
+        public static IWebElement WaitUntilElementIsClickable(By locator, int timeoutInSeconds)
+        {
+            // Initialize WebDriverWait with the provided timeout
+            var wait = new WebDriverWait(TestSetup.driver, TimeSpan.FromSeconds(timeoutInSeconds));
+
+            // Wait until the element is clickable and return it
+            return wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementToBeClickable(locator));
+        }
+
+        public static IWebElement WaitUntilElementIsVisible(By locator, int timeoutInSeconds)
+        {
+            // Initialize WebDriverWait with the provided timeout
+            var wait = new WebDriverWait(TestSetup.driver, TimeSpan.FromSeconds(timeoutInSeconds));
+
+            // Wait until the element is visible and return it
+            return wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementIsVisible(locator));
+        }
+
 
 
         // Method to handle new pop up window or tap

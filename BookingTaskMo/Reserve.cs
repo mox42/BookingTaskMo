@@ -10,16 +10,15 @@ namespace BookingTaskMo
         // RESERVE : Verify Price, Card, Amount and Reserve
         // ===========================================================================================
 
-
         // Method to view the price of a property and validate it against the expected value
         public static void ViewPrice(int ExpectedPrice)
         {
             // Find the price element on the webpage using a CSS selector
-            IWebElement priceElement = TestSetup.driver.FindElement(By.CssSelector("div.e1eebb6a1e.e6208ee469"));
+            IWebElement priceElement = TestSetup.WaitUntilElementIsVisible(By.CssSelector("div.e1eebb6a1e.e6208ee469"), 10);
+
 
             TestSetup.ScrollElement(priceElement);
             TestSetup.HighlightElement(priceElement);
-            Thread.Sleep(100);
 
             // Extract the price text and remove the "JOD" currency symbol
             string priceText = priceElement.Text.Replace("JOD", "").Trim();
@@ -46,7 +45,6 @@ namespace BookingTaskMo
             IWebElement Card = TestSetup.driver.FindElement(By.CssSelector("[data-testid='web-core-property-card']"));
             TestSetup.ScrollElement(Card);
             TestSetup.HighlightElement(Card);
-            Thread.Sleep(150);
             Card.Click();
 
             // Switch to the new window that opened after clicking the card
@@ -64,13 +62,12 @@ namespace BookingTaskMo
         // Method to select the third option by index from a dropdown box in the first row
         public static void SelectFirstRowThirdindexDropDown()
         {
-            Thread.Sleep(1000);
-            IWebElement selectElement = TestSetup.driver.FindElement(By.CssSelector("select.hprt-nos-select"));
+            IWebElement selectElement = TestSetup.WaitUntilElementIsClickable(By.CssSelector("select.hprt-nos-select"), 10);
+
 
             // Use JavaScript to open the dropdown menu
             IJavaScriptExecutor js = (IJavaScriptExecutor)TestSetup.driver;
             js.ExecuteScript("arguments[0].click();", selectElement);
-            Thread.Sleep(1000);
 
             // Create a SelectElement instance to interact with the dropdown
             SelectElement select = new SelectElement(selectElement);
@@ -98,14 +95,15 @@ namespace BookingTaskMo
         // Method to click on the "I will reserve" button
         public static void IWillReserveButton()
         {
-            Thread.Sleep(1000);
-            IWebElement button = TestSetup.driver.FindElement(By.ClassName("txp-bui-main-pp"));
+            IWebElement button = TestSetup.WaitUntilElementIsClickable(By.ClassName("txp-bui-main-pp"), 10);
+
             TestSetup.HighlightElement(button);
 
             // Use JavaScript to click the "I will reserve" button
             IJavaScriptExecutor js = (IJavaScriptExecutor)TestSetup.driver;
             js.ExecuteScript("arguments[0].click();", button);
-            Thread.Sleep(3000);
+
+
 
             // Randomly, the "I will reserve" button may not appear in the table. Instead, another button 
             // with the same functionality will appear. I have treated this as the same button.

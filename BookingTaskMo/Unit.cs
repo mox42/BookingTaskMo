@@ -14,7 +14,6 @@ namespace BookingTaskMo
         // CONFIGURATION
         // ===========================================================================================
 
-
         // Create an instance of ExtentReports to manage the test report
         public static ExtentReports extentReports = new ExtentReports();
 
@@ -111,7 +110,6 @@ namespace BookingTaskMo
         {
             TestSetup.ExecuteWithHandling(() => Properties.NumerOfPropertiesAndScrolling(), "Verify number of properties and adding to wishlist");
         }
-
 
         // ----------------------Verify Price, Card, Amount and Reserve-------------------------------
 

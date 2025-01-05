@@ -10,13 +10,13 @@ namespace BookingTaskMo
         // SELECTANDSEARCH : Select City, Date, Number and Search
         // ===========================================================================================
 
-
         // Method to select a specific city from a dropdown box
         public static void SelectScity()
         {
             // Locate the city dropdown element using its unique ID
             IWebElement dropdownElement = TestSetup.driver.FindElement(By.Id(":rh:"));
-            TestSetup.HighlightElement(dropdownElement);  
+            TestSetup.HighlightElement(dropdownElement);
+            TestSetup.ScrollElement(dropdownElement);
             dropdownElement.Click();
 
             // Get all the options in the dropdown
@@ -77,14 +77,13 @@ namespace BookingTaskMo
                     IWebElement nextButton = TestSetup.driver.FindElement(By.CssSelector("button[aria-label='Next month']"));
                     TestSetup.HighlightElement(nextButton);
                     nextButton.Click();
-                    Thread.Sleep(200);
                     //Console.WriteLine("Attempting to locate month: " + currentMonth);
                 }
 
                 // Select the specific day corresponding to the target date
-                IWebElement dayElement = TestSetup.driver.FindElement(By.CssSelector($"span[data-date='{targetDate.ToString("yyyy-MM-dd")}']"));
+                By dayElementLocator = By.CssSelector($"span[data-date='{targetDate.ToString("yyyy-MM-dd")}']");
+                IWebElement dayElement = TestSetup.WaitUntilElementIsClickable(dayElementLocator, 10);
                 dayElement.Click();
-                Thread.Sleep(1000); 
             }
 
             // Select the 'from' and 'to' dates by calling the helper function for each
@@ -108,19 +107,18 @@ namespace BookingTaskMo
 
             TestSetup.ClickLabel("no_rooms");
             SetValue("input#no_rooms", rooms);
-            Thread.Sleep(500);  // Wait for the values to be updated
 
             // If traveling with pets true, it will click on the "pets" label to select it
             if (withPets)
             {
                 TestSetup.ClickLabel("pets");
             }
-            Thread.Sleep(300);
 
             // Click the "Done" button to save the occupancy configuration
-            IWebElement doneBtn = TestSetup.driver.FindElement(By.CssSelector("button.a83ed08757.c21c56c305.bf0537ecb5"));
+            By doneBtnLocator = By.CssSelector("button.a83ed08757.c21c56c305.bf0537ecb5");
+            IWebElement doneBtn = TestSetup.WaitUntilElementIsClickable(doneBtnLocator, 10);
             TestSetup.HighlightElement(doneBtn);
-            Thread.Sleep(100); 
+
             doneBtn.Click(); 
         }
 
@@ -133,7 +131,6 @@ namespace BookingTaskMo
 
             // Get the current value of the input field
             int currentValue = int.Parse(input.GetAttribute("value"));
-            Thread.Sleep(200);
 
             // Adjust the value by simulating key presses to increase or decrease it
             while (currentValue < targetValue)
